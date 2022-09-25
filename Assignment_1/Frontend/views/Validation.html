@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/Validation.css" />
+    <title>Validation</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form">
+        <form onsubmit="handleSubmit()">
+          <p class="title">Name</p>
+          <input type="text" name="name" id="name" required />
+          <p class="title">Email</p>
+          <input type="email" name="email" id="email" required />
+          <p class="title">Password</p>
+          <input type="password" name="pass" id="password" required />
+          <p class="title">Confirm password</p>
+          <input type="password" name="cnfpass" id="cnfpass" required />
+          <p class="title">Mobile Number</p>
+          <input type="number" name="mobile" id="mob" required />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      function handleSubmit() {
+        let name = document.getElementById("name").value;
+        let password = document.getElementById("password").value;
+        let confirmPass = document.getElementById("cnfpass").value;
+        let mobile = document.getElementById("mob").value;
+        let email = document.getElementById("email").value;
+
+        if (confirmPass != password) {
+          return alert("Password and Confirm Password do not match");
+        } 
+        if (mobile.length != 10) {
+          return alert(`Please enter a valid number`);
+        }
+      }
+    </script>
+  </body>
+</html>
