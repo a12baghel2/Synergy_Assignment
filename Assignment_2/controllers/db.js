@@ -33,10 +33,25 @@ const user = db.define("User", {
         type: Sequelize.STRING,
     },
     logs : {
-        type : Sequelize.JSON(Sequelize.JSON),
+        type : Sequelize.JSON(),
+    }
+})
+
+const logs = db.define('logs', {
+    email : {
+        type : Sequelize.STRING,
+        allowNull : false
+    },
+    client_ip : {
+        type : Sequelize.STRING,
+        allowNull : false
+    },
+    activity : {
+        type : Sequelize.STRING,
+        allowNull : false
     }
 })
 
 module.exports = {
-    db,user
+    db,user, logs
 }

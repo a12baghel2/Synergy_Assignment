@@ -13,12 +13,16 @@ route.get("/all", verify, async (req, res) => {
       },
     });
     console.log(req.ip);
-    res.json(data);
+    res.render('admin/home', {data : data});
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal error occurred");
   }
 });
+
+route.get('/create/user', verify, (req,res) => {
+  res.render('admin/create');
+})
 
 route.post("/create/user", verify, async (req, res) => {
   try {
@@ -31,12 +35,19 @@ route.post("/create/user", verify, async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
     });
-    res.status(200).send({ message: "user added successfully", user: newUser });
+    res.status(200).redirect("/admin/all");
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
   }
 });
+
+route.get("/edit/password/:id", verify,  async (req,res) => {
+  const data = await user.findOne({where : {
+    id  : req.params.id,
+  }})
+  res.render("admin/reset", {data : data});
+})
 
 route.put("/edit/password/:id", verify, async (req, res) => {
   try {
@@ -51,11 +62,19 @@ route.put("/edit/password/:id", verify, async (req, res) => {
         },
       }
     );
-    res.status(200).send("Password updated successfully");
+    res.status(200).redirect("admin/all");
   } catch (err) {
     console.log(err);
     res.status(500).send("internal server error");
   }
+});
+
+
+route.get("/edit/details/:id", verify, async (req, res) => {
+  const data = await user.findOne({where : {
+    id  : req.params.id,
+  }})
+  res.render("admin/edit", {data : data});
 });
 
 route.put("/edit/details/:id", verify, async (req, res) => {
@@ -75,7 +94,7 @@ route.put("/edit/details/:id", verify, async (req, res) => {
         },
       }
     );
-    res.status(200).send("User updated sucessfully");
+    res.status(200).redirect("admin/all");
   } catch (err) {
     console.log(err);
     res.status(500).send("internal server error");
@@ -89,7 +108,7 @@ route.delete("/delete/:id", verify, async (req, res) => {
         id: req.params.id,
       },
     });
-    res.status(200).send("Deleted successfully");
+    res.status(200).redirect("admin/all");
   } catch (err) {
     res.status(500).send("Cannot delete");
   }

@@ -1,11 +1,10 @@
 const express = require("express");
 const { db, user } = require("./controllers/db");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const method_override = require("method-override")
 const authRoute = require("./route/auth");
 const adminRoute = require("./route/admin");
 const userRoute = require("./route/user");
-const verify = require('./controllers/verifyToken')
+const forwardAuth = require("./controllers/forwardAuth");
 const cookieParser = require("cookie-parser");
 require("dotenv/config");
 
@@ -13,15 +12,16 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(method_override("_method"));
+app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use("/auth", authRoute);
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 
 
-app.get("/", verify, async (req, res) => {
-  console.log(req.cookies.token);
-  res.status(200).send("successful")
+app.get("/", forwardAuth, (req, res) => {
+  res.render('index')
 });
 
 db.sync()
